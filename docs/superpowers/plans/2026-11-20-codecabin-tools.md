@@ -76,7 +76,7 @@ spec 隐含但单列任务未必自然覆盖、最可能伤到使用者的输入
 - Consumes: 无
 - Produces: 可 `npm run dev` / `npm run build` 的骨架；`index.html` 内含 `<div id="app"></div>` 与 `<script type="module" src="/src/main.ts">`；后续所有 Task 在此之上开发。
 
-- [ ] **Step 1: 更新 `package.json`**
+- [x] **Step 1: 更新 `package.json`**
 
 保留现有 `dependencies` 字段不动，新增：
 
@@ -98,26 +98,26 @@ spec 隐含但单列任务未必自然覆盖、最可能伤到使用者的输入
 
 然后 `npm install`。
 
-- [ ] **Step 2: 创建 `tsconfig.json`**
+- [x] **Step 2: 创建 `tsconfig.json`**
 
 要点（实现者可自行补充无害项）：`"strict": true`、`"target": "ES2022"`、`"module": "ESNext"`、`"moduleResolution": "bundler"`、`"lib": ["ES2022", "DOM"]`、`"skipLibCheck": true`、`"noEmit": true`、`"include": ["src"]`。
 
-- [ ] **Step 3: 创建 `vite.config.ts`（本任务不含 test 块，Task 2 再加）**
+- [x] **Step 3: 创建 `vite.config.ts`（本任务不含 test 块，Task 2 再加）**
 
 内容为空 `defineConfig({})` 级别即可（Vite 默认行为够用）。
 
-- [ ] **Step 4: 创建 `index.html` 与 `src/main.ts` 占位**
+- [x] **Step 4: 创建 `index.html` 与 `src/main.ts` 占位**
 
 `index.html`：`<!doctype html><html lang="zh-CN">` + `<head><meta charset="utf-8"><title>Codecabin · 本地文本转换</title></head>` + `<body><div id="app"></div><script type="module" src="/src/main.ts"></script></body>`。
 
 `src/main.ts`：`document.querySelector('#app')!.textContent = 'Codecabin'`（占位，Task 4 起替换为 `renderApp` 调用；中文静态文案，无用户数据）。
 
-- [ ] **Step 5: 验证构建与 dev 服务器**
+- [x] **Step 5: 验证构建与 dev 服务器**
 
 Run: `npm run build` → Expected: 退出码 0，产出 `dist/`。
 Run: `npm run dev &` 后 `curl -s http://localhost:5173/ | grep 'id="app"'` → Expected: 命中该行；随后 kill dev server。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add package.json package-lock.json tsconfig.json vite.config.ts index.html src/main.ts
