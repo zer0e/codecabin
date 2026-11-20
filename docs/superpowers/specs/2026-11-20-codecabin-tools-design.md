@@ -109,6 +109,7 @@ index.html（空壳，仅挂载点）
 - [宽容边界放宽接受面] → 全部规则以单测锁定，防止实现漂移
 - [TS 模板渲染 XSS 面] → 静态模板 + textContent 注入纪律，UI 测试覆盖用户数据渲染
 - [happy-dom 与真实浏览器差异] → 关键路径（剪贴板、Network）保留真实浏览器冒烟
+- [已知限制：JSON 大数精度] `JSON.parse → JSON.stringify` 基线（用户确认）下，超出 Number 安全范围的数字会丢失精度（如 snowflake 长 ID 被改写）、溢出数字（如 `1e999`）变为 `null`。这是原生 JSON API 的固有行为，无损数字需更换解析架构（lossless parser），超出本 change 范围。最终审查实证确认；如后续需要无损处理，另开 change。
 
 ## 留给实现者的空间
 
