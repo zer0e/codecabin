@@ -344,7 +344,7 @@ git commit -m "feat: JSON 工具面板 UI"
 - Consumes: Task 3 的 `ToolResult`
 - Produces: `export function escapeText(input: string): ToolResult`、`export function unescapeText(input: string): ToolResult`；去转义错误文案前缀固定 `去转义失败：`。
 
-- [ ] **Step 1: 写失败测试 `src/tools/escape.test.ts`**
+- [x] **Step 1: 写失败测试 `src/tools/escape.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -392,19 +392,19 @@ describe('往返一致性', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/tools/escape.test.ts` → Expected: FAIL（模块不存在）。
 
-- [ ] **Step 3: 实现 `src/tools/escape.ts`**
+- [x] **Step 3: 实现 `src/tools/escape.ts`**
 
 `escapeText`：`{ ok: true, value: JSON.stringify(input).slice(1, -1) }`。`unescapeText` 按设计契约的宽容预处理顺序实现：① 首尾成对双引号则去除；② 真实 `\r\n`/`\r`/`\n` → 两字符 `\` + `n`；③ 其余裸控制字符 U+0000–U+001F → `\uXXXX` 转义；④ `JSON.parse('"' + processed + '"')`，try/catch 返回 `{ ok: false, error: '去转义失败：' + message }`。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npx vitest run src/tools/escape.test.ts` → Expected: PASS（9 tests）。
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/tools/escape.ts src/tools/escape.test.ts
