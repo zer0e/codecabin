@@ -84,3 +84,22 @@ describe('Base64 面板', () => {
     expect(r.querySelector<HTMLTextAreaElement>('#base64-input')!.value).toBe('!!!not-base64!!!');
   });
 });
+
+describe('Tab 切换', () => {
+  it('默认仅 JSON 面板可见', () => {
+    const r = setup();
+    expect(r.querySelector('#panel-json')!.hasAttribute('hidden')).toBe(false);
+    expect(r.querySelector('#panel-escape')!.hasAttribute('hidden')).toBe(true);
+  });
+  it('切走再切回，输入内容与模式设置保留', () => {
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#json-input')!.value = '{"a":1}';
+    r.querySelector<HTMLButtonElement>('[data-tab="base64"]')!.click();
+    r.querySelector<HTMLSelectElement>('#base64-mode')!.value = 'urlsafe';
+    r.querySelector<HTMLButtonElement>('[data-tab="json"]')!.click();
+    expect(r.querySelector<HTMLTextAreaElement>('#json-input')!.value).toBe('{"a":1}');
+    expect(r.querySelector<HTMLButtonElement>('[data-tab="base64"]')!.getAttribute('aria-selected')).toBe('false');
+    r.querySelector<HTMLButtonElement>('[data-tab="base64"]')!.click();
+    expect(r.querySelector<HTMLSelectElement>('#base64-mode')!.value).toBe('urlsafe');
+  });
+});

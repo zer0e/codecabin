@@ -130,8 +130,20 @@ function bindBase64Panel(panel: HTMLElement): void {
   });
 }
 
-/** 挂载当前已完成的面板（本 Task 后为 JSON + 转义 + Base64 三个面板）。 */
+// 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
+const tabNavHtml = `
+<nav class="tabs" aria-label="工具切换">
+  <button class="tab" type="button" data-tab="json" aria-selected="true">JSON</button>
+  <button class="tab" type="button" data-tab="escape" aria-selected="false">转义</button>
+  <button class="tab" type="button" data-tab="base64" aria-selected="false">Base64</button>
+</nav>
+`;
+
+/** 挂载 Tab nav 与三个面板；面板 DOM 常驻，仅以 hidden 切换可见性（输入天然保留，不做状态序列化）。 */
 export function renderApp(root: HTMLElement): void {
+  const nav = mountTemplate(tabNavHtml);
+  root.append(nav);
+
   const panel = mountTemplate(jsonPanelHtml);
   bindJsonPanel(panel);
   root.append(panel);
@@ -143,4 +155,31 @@ export function renderApp(root: HTMLElement): void {
   const base64Panel = mountTemplate(base64PanelHtml);
   bindBase64Panel(base64Panel);
   root.append(base64Panel);
+
+  const panels: Record<string, HTMLElement> = {
+    json: panel,
+    escape: escapePanel,
+    base64: base64Panel,
+  };
+  const tabs = nav.querySelectorAll<HTMLButtonElement>('.tab');
+
+  const activate = (name: string): void => {
+    for (const [key, p] of Object.entries(panels)) {
+      if (key === name) {
+        p.removeAttribute('hidden');
+      } else {
+        p.setAttribute('hidden', '');
+      }
+    }
+    tabs.forEach((tab) => {
+      tab.setAttribute('aria-selected', String(tab.dataset.tab === name));
+    });
+  };
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => activate(tab.dataset.tab!));
+  });
+
+  // 默认激活 JSON 面板。
+  activate('json');
 }
