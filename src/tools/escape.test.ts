@@ -31,6 +31,14 @@ describe('unescapeText', () => {
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.error.startsWith('去转义失败：')).toBe(true);
   });
+  it('奇数个反斜杠紧邻真实换行报错，不静默改写（I-2）', () => {
+    const r = unescapeText('a\\\nb'); // a + 孤立反斜杠 + 真实 LF + b
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error.startsWith('去转义失败：')).toBe(true);
+  });
+  it('偶数个反斜杠紧邻真实换行还原为「反斜杠+换行」（I-2）', () => {
+    expect(unescapeText('a\\\\\nb')).toEqual({ ok: true, value: 'a\\\nb' });
+  });
 });
 
 describe('往返一致性', () => {

@@ -7,7 +7,7 @@ import { mountTemplate } from './render';
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
 const jsonPanelHtml = `
-<section id="panel-json" class="panel">
+<section id="panel-json" class="panel" role="tabpanel">
   <h2>JSON 格式化 / 压缩</h2>
   <label for="json-input">输入</label>
   <textarea id="json-input" rows="8" placeholder="在此粘贴 JSON"></textarea>
@@ -59,7 +59,7 @@ function bindJsonPanel(panel: HTMLElement): void {
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
 const escapePanelHtml = `
-<section id="panel-escape" class="panel">
+<section id="panel-escape" class="panel" role="tabpanel">
   <h2>JSON 字符串转义 / 去转义</h2>
   <label for="escape-input">输入</label>
   <textarea id="escape-input" rows="8" placeholder="在此粘贴文本"></textarea>
@@ -105,7 +105,7 @@ function bindEscapePanel(panel: HTMLElement): void {
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
 const base64PanelHtml = `
-<section id="panel-base64" class="panel">
+<section id="panel-base64" class="panel" role="tabpanel">
   <h2>Base64 编码 / 解码</h2>
   <label for="base64-input">输入</label>
   <textarea id="base64-input" rows="8" placeholder="在此粘贴文本"></textarea>
@@ -157,10 +157,10 @@ function bindBase64Panel(panel: HTMLElement): void {
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
 const tabNavHtml = `
-<nav class="tabs" aria-label="工具切换">
-  <button class="tab" type="button" data-tab="json" aria-selected="true">JSON</button>
-  <button class="tab" type="button" data-tab="escape" aria-selected="false">转义</button>
-  <button class="tab" type="button" data-tab="base64" aria-selected="false">Base64</button>
+<nav class="tabs" role="tablist" aria-label="工具切换">
+  <button class="tab" type="button" role="tab" data-tab="json" aria-controls="panel-json" aria-selected="true">JSON</button>
+  <button class="tab" type="button" role="tab" data-tab="escape" aria-controls="panel-escape" aria-selected="false">转义</button>
+  <button class="tab" type="button" role="tab" data-tab="base64" aria-controls="panel-base64" aria-selected="false">Base64</button>
 </nav>
 `;
 

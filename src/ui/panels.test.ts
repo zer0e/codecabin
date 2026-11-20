@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { renderApp } from './panels';
 
 function setup(): HTMLElement {
@@ -30,6 +30,17 @@ describe('JSON 面板', () => {
     expect(r.querySelector('#json-error')!.textContent).toContain('JSON 解析失败');
     expect(r.querySelector<HTMLTextAreaElement>('#json-output')!.value).toBe('');
     expect(r.querySelector<HTMLTextAreaElement>('#json-input')!.value).toBe('{invalid');
+  });
+  it('先失败再成功：错误区清空、输出为成功结果（M-2 回归锁）', () => {
+    const r = setup();
+    const input = r.querySelector<HTMLTextAreaElement>('#json-input')!;
+    input.value = '{invalid';
+    r.querySelector<HTMLButtonElement>('#json-minify')!.click();
+    expect(r.querySelector('#json-error')!.textContent).toContain('JSON 解析失败');
+    input.value = '{"a":1}';
+    r.querySelector<HTMLButtonElement>('#json-format')!.click();
+    expect(r.querySelector('#json-error')!.textContent).toBe('');
+    expect(r.querySelector<HTMLTextAreaElement>('#json-output')!.value).toContain('"a": 1');
   });
   it('HTML 注入输入仅按纯文本呈现（Review Focus #4）', () => {
     const r = setup();
@@ -86,6 +97,16 @@ describe('Base64 面板', () => {
 });
 
 describe('Tab 切换', () => {
+  it('Tab 具备完整 ARIA 语义：tablist/tab/aria-controls/tabpanel（M-4）', () => {
+    const r = setup();
+    expect(r.querySelector('nav.tabs')!.getAttribute('role')).toBe('tablist');
+    for (const name of ['json', 'escape', 'base64']) {
+      const tab = r.querySelector(`[data-tab="${name}"]`)!;
+      expect(tab.getAttribute('role')).toBe('tab');
+      expect(tab.getAttribute('aria-controls')).toBe(`panel-${name}`);
+      expect(r.querySelector(`#panel-${name}`)!.getAttribute('role')).toBe('tabpanel');
+    }
+  });
   it('默认仅 JSON 面板可见', () => {
     const r = setup();
     expect(r.querySelector('#panel-json')!.hasAttribute('hidden')).toBe(false);
@@ -105,9 +126,21 @@ describe('Tab 切换', () => {
 });
 
 describe('一键复制', () => {
+  // 桩隔离（M-1）：navigator 经 vi.stubGlobal 打桩、afterEach 统一还原；
+  // document.execCommand 非全局属性，记录原值并在 afterEach 恢复，消除用例间桩污染与顺序依赖。
+  const originalExecCommand = document.execCommand;
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    if (typeof originalExecCommand === 'function') {
+      document.execCommand = originalExecCommand;
+    } else {
+      delete (document as unknown as Record<string, unknown>).execCommand;
+    }
+  });
+
   it('clipboard API 成功：writeText 收到输出内容，按钮反馈后恢复', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
-    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
     const r = setup();
     r.querySelector<HTMLTextAreaElement>('#json-output')!.value = 'payload';
     const btn = r.querySelector<HTMLButtonElement>('#json-copy')!;
@@ -119,7 +152,7 @@ describe('一键复制', () => {
     await vi.waitFor(() => expect(btn.textContent).toBe('复制'), { timeout: 3000 }); // 1500ms 恢复
   });
   it('无 clipboard 时回退 execCommand', async () => {
-    Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
+    vi.stubGlobal('navigator', { clipboard: undefined });
     const exec = vi.fn().mockReturnValue(true);
     (document as unknown as Record<string, unknown>).execCommand = exec;
     const r = setup();
@@ -128,10 +161,10 @@ describe('一键复制', () => {
     await vi.waitFor(() => expect(exec).toHaveBeenCalledWith('copy'));
   });
   it('writeText 失败且回退也失败：可见失败反馈', async () => {
-    Object.defineProperty(navigator, 'clipboard', {
-      value: { writeText: vi.fn().mockRejectedValue(new Error('denied')) }, configurable: true,
+    vi.stubGlobal('navigator', {
+      clipboard: { writeText: vi.fn().mockRejectedValue(new Error('denied')) },
     });
-    const exec = vi.fn().mockReturnValue(false); // 覆盖上一用例遗留的 true 桩，确保最终失败
+    const exec = vi.fn().mockReturnValue(false); // 回退返回 false，确保最终失败
     (document as unknown as Record<string, unknown>).execCommand = exec;
     const r = setup();
     r.querySelector<HTMLTextAreaElement>('#json-output')!.value = 'x';
@@ -141,7 +174,7 @@ describe('一键复制', () => {
   });
   it('空输出点复制：不调用剪贴板且给出提示（Review Focus #3）', async () => {
     const writeText = vi.fn();
-    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
     const r = setup();
     const btn = r.querySelector<HTMLButtonElement>('#json-copy')!;
     btn.click();

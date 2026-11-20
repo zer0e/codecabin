@@ -43,7 +43,8 @@ export function decodeBase64(input: string, mode: Base64Mode): ToolResult {
     for (let i = 0; i < binary.length; i++) {
       bytes[i] = binary.charCodeAt(i);
     }
-    const value = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    // ignoreBOM: true 保留开头 U+FEFF，保证 decode(encode(x)) === x 往返一致
+    const value = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes);
     return { ok: true, value };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

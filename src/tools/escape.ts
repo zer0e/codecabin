@@ -11,8 +11,15 @@ export function unescapeText(input: string): ToolResult {
     if (processed.length >= 2 && processed.startsWith('"') && processed.endsWith('"')) {
       processed = processed.slice(1, -1);
     }
-    // ② 真实 CR/LF（含 CRLF）→ 两字符「反斜杠+n」；只处理真实控制字符，不碰字面反斜杠序列
-    processed = processed.replace(/\r\n|\r|\n/g, '\\n');
+    // ② 真实 CR/LF（含 CRLF）→ 两字符「反斜杠+n」；只处理真实控制字符，不碰字面反斜杠序列。
+    // 携带换行前的反斜杠游程：奇数游程意味着孤立反斜杠「吸收」换行（非法转义），报错而非静默改写；
+    // 偶数游程是成对转义反斜杠，保持原行为（反斜杠对 + 换行转义）。
+    processed = processed.replace(/(\\*)(\r\n|\r|\n)/g, (_m, slashes: string) => {
+      if (slashes.length % 2 === 1) {
+        throw new Error('孤立反斜杠后跟真实换行，不是合法转义');
+      }
+      return slashes + '\\n';
+    });
     // ③ 其余裸控制字符（码点小于 0x20）→ 反斜杠 uXXXX 形式转义
     let escaped = '';
     for (const ch of processed) {

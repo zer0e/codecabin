@@ -41,6 +41,11 @@ describe('decodeBase64', () => {
   it('空白+缺 padding+URL-safe 字符组合输入仍可解码（Review Focus #1）', () => {
     expect(decodeBase64('Ye-_ \nv2 I', 'urlsafe')).toEqual({ ok: true, value: slashText });
   });
+  it('有效长度 mod 4 余 1 报错（单字符 A，M-2 回归锁）', () => {
+    const r = decodeBase64('A', 'standard');
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.error).toContain('mod 4 余 1');
+  });
 });
 
 describe('往返一致性', () => {
@@ -50,6 +55,21 @@ describe('往返一致性', () => {
       const e = encodeBase64(corpus, mode);
       expect(e.ok).toBe(true);
       if (e.ok) expect(decodeBase64(e.value, mode)).toEqual({ ok: true, value: corpus });
+    }
+  });
+  it('开头 BOM（U+FEFF）文本两模式往返一致（I-1）', () => {
+    const bomText = '\uFEFFhello';
+    for (const mode of ['standard', 'urlsafe'] as const) {
+      const e = encodeBase64(bomText, mode);
+      expect(e.ok).toBe(true);
+      if (e.ok) expect(decodeBase64(e.value, mode)).toEqual({ ok: true, value: bomText });
+    }
+  });
+  it('单字符 U+FEFF 两模式往返一致（I-1）', () => {
+    for (const mode of ['standard', 'urlsafe'] as const) {
+      const e = encodeBase64('\uFEFF', mode);
+      expect(e.ok).toBe(true);
+      if (e.ok) expect(decodeBase64(e.value, mode)).toEqual({ ok: true, value: '\uFEFF' });
     }
   });
 });
