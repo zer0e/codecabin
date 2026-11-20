@@ -2,6 +2,7 @@ import { decodeBase64, encodeBase64 } from '../tools/base64';
 import { escapeText, unescapeText } from '../tools/escape';
 import { formatJson, minifyJson } from '../tools/json';
 import type { Base64Mode, ToolResult } from '../tools/types';
+import { copyText } from './clipboard';
 import { mountTemplate } from './render';
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
@@ -19,6 +20,7 @@ const jsonPanelHtml = `
   <button id="json-minify" type="button">压缩</button>
   <label for="json-output">输出</label>
   <textarea id="json-output" rows="8" readonly></textarea>
+  <button id="json-copy" class="copy" type="button">复制</button>
   <div id="json-error" class="error"></div>
 </section>
 `;
@@ -46,6 +48,11 @@ function bindJsonPanel(panel: HTMLElement): void {
   panel.querySelector<HTMLButtonElement>('#json-minify')!.addEventListener('click', () => {
     apply(minifyJson(input.value));
   });
+
+  const copyButton = panel.querySelector<HTMLButtonElement>('#json-copy')!;
+  copyButton.addEventListener('click', () => {
+    void copyText(output.value, copyButton);
+  });
 }
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
@@ -58,6 +65,7 @@ const escapePanelHtml = `
   <button id="escape-unescape" type="button">去转义</button>
   <label for="escape-output">输出</label>
   <textarea id="escape-output" rows="8" readonly></textarea>
+  <button id="escape-copy" class="copy" type="button">复制</button>
   <div id="escape-error" class="error"></div>
 </section>
 `;
@@ -84,6 +92,11 @@ function bindEscapePanel(panel: HTMLElement): void {
   panel.querySelector<HTMLButtonElement>('#escape-unescape')!.addEventListener('click', () => {
     apply(unescapeText(input.value));
   });
+
+  const copyButton = panel.querySelector<HTMLButtonElement>('#escape-copy')!;
+  copyButton.addEventListener('click', () => {
+    void copyText(output.value, copyButton);
+  });
 }
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
@@ -101,6 +114,7 @@ const base64PanelHtml = `
   <button id="base64-decode" type="button">解码</button>
   <label for="base64-output">输出</label>
   <textarea id="base64-output" rows="8" readonly></textarea>
+  <button id="base64-copy" class="copy" type="button">复制</button>
   <div id="base64-error" class="error"></div>
 </section>
 `;
@@ -127,6 +141,11 @@ function bindBase64Panel(panel: HTMLElement): void {
   });
   panel.querySelector<HTMLButtonElement>('#base64-decode')!.addEventListener('click', () => {
     apply(decodeBase64(input.value, mode.value as Base64Mode));
+  });
+
+  const copyButton = panel.querySelector<HTMLButtonElement>('#base64-copy')!;
+  copyButton.addEventListener('click', () => {
+    void copyText(output.value, copyButton);
   });
 }
 

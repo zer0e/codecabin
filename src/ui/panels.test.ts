@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderApp } from './panels';
 
 function setup(): HTMLElement {
@@ -101,5 +101,51 @@ describe('Tab 切换', () => {
     expect(r.querySelector<HTMLButtonElement>('[data-tab="base64"]')!.getAttribute('aria-selected')).toBe('false');
     r.querySelector<HTMLButtonElement>('[data-tab="base64"]')!.click();
     expect(r.querySelector<HTMLSelectElement>('#base64-mode')!.value).toBe('urlsafe');
+  });
+});
+
+describe('一键复制', () => {
+  it('clipboard API 成功：writeText 收到输出内容，按钮反馈后恢复', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#json-output')!.value = 'payload';
+    const btn = r.querySelector<HTMLButtonElement>('#json-copy')!;
+    btn.click();
+    await vi.waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith('payload');
+      expect(btn.textContent).toBe('已复制');
+    });
+    await vi.waitFor(() => expect(btn.textContent).toBe('复制'), { timeout: 3000 }); // 1500ms 恢复
+  });
+  it('无 clipboard 时回退 execCommand', async () => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
+    const exec = vi.fn().mockReturnValue(true);
+    (document as unknown as Record<string, unknown>).execCommand = exec;
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#json-output')!.value = 'x';
+    r.querySelector<HTMLButtonElement>('#json-copy')!.click();
+    await vi.waitFor(() => expect(exec).toHaveBeenCalledWith('copy'));
+  });
+  it('writeText 失败且回退也失败：可见失败反馈', async () => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: vi.fn().mockRejectedValue(new Error('denied')) }, configurable: true,
+    });
+    const exec = vi.fn().mockReturnValue(false); // 覆盖上一用例遗留的 true 桩，确保最终失败
+    (document as unknown as Record<string, unknown>).execCommand = exec;
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#json-output')!.value = 'x';
+    const btn = r.querySelector<HTMLButtonElement>('#json-copy')!;
+    btn.click();
+    await vi.waitFor(() => expect(btn.textContent).toContain('复制失败'));
+  });
+  it('空输出点复制：不调用剪贴板且给出提示（Review Focus #3）', async () => {
+    const writeText = vi.fn();
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    const r = setup();
+    const btn = r.querySelector<HTMLButtonElement>('#json-copy')!;
+    btn.click();
+    expect(writeText).not.toHaveBeenCalled();
+    await vi.waitFor(() => expect(btn.textContent).toContain('无内容'));
   });
 });
