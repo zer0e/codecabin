@@ -1,0 +1,142 @@
+/* 全站基础样式：简洁中文界面，纯浏览器端工具页。 */
+
+/* 防 CSS 覆盖 hidden 属性：面板切换依赖 hidden，必须最高优先级。 */
+[hidden] {
+  display: none !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 24px 16px;
+  /* 中文 sans-serif 字体栈 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #2c3e50;
+  background: #f5f6f8;
+}
+
+/* 居中布局：内容限宽、水平居中 */
+#app {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Tab 导航 */
+nav.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #dcdfe4;
+  padding-bottom: 8px;
+}
+
+nav .tab {
+  padding: 6px 16px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  font: inherit;
+  color: #57606f;
+  cursor: pointer;
+}
+
+nav .tab:hover {
+  background: #e8eaee;
+}
+
+/* 激活态 Tab */
+nav .tab[aria-selected='true'] {
+  background: #2c3e50;
+  border-color: #2c3e50;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 面板布局 */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #dcdfe4;
+  border-radius: 8px;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.panel label {
+  font-weight: 600;
+  color: #57606f;
+}
+
+/* 输入/输出区：等宽字体、合理尺寸 */
+textarea {
+  width: 100%;
+  min-height: 160px;
+  padding: 10px;
+  border: 1px solid #c8ccd2;
+  border-radius: 6px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo,
+    'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+textarea[readonly] {
+  background: #f8f9fa;
+}
+
+select {
+  align-self: flex-start;
+  padding: 4px 8px;
+  border: 1px solid #c8ccd2;
+  border-radius: 6px;
+  font: inherit;
+}
+
+/* 动作按钮行 */
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 6px 16px;
+  border: 1px solid #c8ccd2;
+  border-radius: 6px;
+  background: #ffffff;
+  font: inherit;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #eef0f3;
+}
+
+button.copy {
+  align-self: flex-start;
+}
+
+/* 统一错误展示：红色可读文案，非空才可见 */
+.error {
+  color: #c0392b;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.error:empty {
+  display: none;
+}

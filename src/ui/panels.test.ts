@@ -149,3 +149,14 @@ describe('一键复制', () => {
     await vi.waitFor(() => expect(btn.textContent).toContain('无内容'));
   });
 });
+
+describe('错误展示统一', () => {
+  it('三面板错误区均存在、class 为 error 且初始为空', () => {
+    const r = setup();
+    for (const id of ['json', 'escape', 'base64']) {
+      const el = r.querySelector<HTMLElement>(`#${id}-error`)!;
+      expect(el.classList.contains('error')).toBe(true);
+      expect(el.textContent).toBe('');
+    }
+  });
+});

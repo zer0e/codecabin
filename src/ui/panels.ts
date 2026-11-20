@@ -16,8 +16,10 @@ const jsonPanelHtml = `
     <option value="2" selected>2 空格</option>
     <option value="4">4 空格</option>
   </select>
-  <button id="json-format" type="button">格式化</button>
-  <button id="json-minify" type="button">压缩</button>
+  <div class="actions">
+    <button id="json-format" type="button">格式化</button>
+    <button id="json-minify" type="button">压缩</button>
+  </div>
   <label for="json-output">输出</label>
   <textarea id="json-output" rows="8" readonly></textarea>
   <button id="json-copy" class="copy" type="button">复制</button>
@@ -61,8 +63,10 @@ const escapePanelHtml = `
   <h2>JSON 字符串转义 / 去转义</h2>
   <label for="escape-input">输入</label>
   <textarea id="escape-input" rows="8" placeholder="在此粘贴文本"></textarea>
-  <button id="escape-escape" type="button">转义</button>
-  <button id="escape-unescape" type="button">去转义</button>
+  <div class="actions">
+    <button id="escape-escape" type="button">转义</button>
+    <button id="escape-unescape" type="button">去转义</button>
+  </div>
   <label for="escape-output">输出</label>
   <textarea id="escape-output" rows="8" readonly></textarea>
   <button id="escape-copy" class="copy" type="button">复制</button>
@@ -110,8 +114,10 @@ const base64PanelHtml = `
     <option value="standard" selected>标准</option>
     <option value="urlsafe">URL-safe</option>
   </select>
-  <button id="base64-encode" type="button">编码</button>
-  <button id="base64-decode" type="button">解码</button>
+  <div class="actions">
+    <button id="base64-encode" type="button">编码</button>
+    <button id="base64-decode" type="button">解码</button>
+  </div>
   <label for="base64-output">输出</label>
   <textarea id="base64-output" rows="8" readonly></textarea>
   <button id="base64-copy" class="copy" type="button">复制</button>
