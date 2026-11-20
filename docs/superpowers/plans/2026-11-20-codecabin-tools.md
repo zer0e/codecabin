@@ -481,7 +481,7 @@ git commit -m "feat: 转义工具面板 UI"
 - Consumes: Task 3 的 `ToolResult`、`Base64Mode`
 - Produces: `export function encodeBase64(input: string, mode: Base64Mode): ToolResult`、`export function decodeBase64(input: string, mode: Base64Mode): ToolResult`；解码错误文案前缀固定：字符集非法 `非法 Base64 字符`、UTF-8 非法 `解码结果不是合法的 UTF-8 文本`（其后附原始 message）。
 
-- [ ] **Step 1: 写失败测试 `src/tools/base64.test.ts`**（以下期望值均已实测核验，不得改动）
+- [x] **Step 1: 写失败测试 `src/tools/base64.test.ts`**（以下期望值均已实测核验，不得改动）
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -541,19 +541,19 @@ describe('往返一致性', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/tools/base64.test.ts` → Expected: FAIL（模块不存在）。
 
-- [ ] **Step 3: 实现 `src/tools/base64.ts`**
+- [x] **Step 3: 实现 `src/tools/base64.ts`**
 
 严格按设计契约：编码 `TextEncoder → 字节 → binary string → btoa`，urlsafe 再 `+`→`-`、`/`→`_` 并去 `=`；解码 ① 去除全部空白（`\s`）② urlsafe 还原 `-`→`+`、`_`→`/` ③ 字符集校验（清洗后须匹配 `/^[A-Za-z0-9+/]*={0,2}$/` 且长度 mod 4 合法，先按模 4 补 `=`）④ `atob` → 字节 → `new TextDecoder('utf-8', { fatal: true })` 于 try/catch 中捕获非法 UTF-8。各失败点返回对应前缀的 `ToolResult` 错误。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npx vitest run src/tools/base64.test.ts` → Expected: PASS（10 tests）。
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/tools/base64.ts src/tools/base64.test.ts
