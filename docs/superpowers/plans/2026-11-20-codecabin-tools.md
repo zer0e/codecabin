@@ -773,7 +773,7 @@ git commit -m "feat: 一键复制（clipboard API + execCommand 回退）与反�
 - Consumes: 三面板既有 `#*-error`（class `error`）
 - Produces: 全站样式契约——`main.css` 中 `.error` 为红色可读文案样式（非空才可见，如 `:empty { display: none }`）；页面基础样式：中文字体栈、面板宽度、textarea 等宽字体、Tab 激活态。无新增 JS 接口。
 
-- [ ] **Step 1: 追加失败测试**
+- [x] **Step 1: 追加失败测试**
 
 ```ts
 describe('错误展示统一', () => {
@@ -788,20 +788,20 @@ describe('错误展示统一', () => {
 });
 ```
 
-- [ ] **Step 2: 运行——若 Task 4/6/8 已落实 class 则此测试直接 PASS**
+- [x] **Step 2: 运行——若 Task 4/6/8 已落实 class 则此测试直接 PASS**
 
 Run: `npx vitest run src/ui/panels.test.ts -t '错误展示统一'` → Expected: PASS（该用例是纪律回归检查；若 FAIL 修 panels 使其 PASS）。
 
-- [ ] **Step 3: 创建 `src/style.css` 并在 `main.ts` 引入**
+- [x] **Step 3: 创建 `src/style.css` 并在 `main.ts` 引入**
 
 `body` 中文 sans-serif 字体栈 + 居中布局；`textarea` 等宽字体、合理尺寸；`nav .tab[aria-selected="true"]` 激活样式；`.error:empty { display: none }`、`.error` 红色（如 `#c0392b`）；`[hidden] { display: none !important }`（防 CSS 覆盖 hidden）。样式细节允许按设计「留给实现者的空间」微调，但上述规则必须存在。
 
-- [ ] **Step 4: 验证构建与三工具非法输入行为**
+- [x] **Step 4: 验证构建与三工具非法输入行为**
 
 Run: `npm run build && npm test` → Expected: 均成功。
 Run: `npm run dev`，三个工具分别输入非法内容（`{invalid`、`a\qb`、`!!!not-base64!!!`）点击动作 → Expected: 各自错误区展示可读中文错误，页面不崩溃，其余功能（Tab、其他面板）可继续用。
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/style.css src/main.ts src/ui/panels.ts src/ui/panels.test.ts

@@ -7,14 +7,14 @@
 
 ## 当前任务
 
-- Plan task: `### Task 10: 一键复制与反馈（对应 tasks.md 5.2）`
-- OpenSpec task: `- [ ] 5.2 实现一键复制（clipboard API + execCommand 回退）与成功/失败反馈，验证 localhost 下复制内容进入剪贴板且有可见反馈`
+- Plan task: `### Task 11: 统一错误展示样式与页面基础样式（对应 tasks.md 5.3）`
+- OpenSpec task: `- [ ] 5.3 统一错误展示样式与页面基础样式（中文文案），验证三个工具非法输入均展示可读错误且页面不崩溃`
 - 阶段: implementing
 - 实现提交: （待回报）
-- RED/GREEN: 必须回报 RED（一键复制 4 用例 FAIL）与 GREEN（npm test 全绿 43 tests）
+- RED/GREEN: 纪律回归测试可能首跑即 PASS（计划明示，见 ledger Ruling）；GREEN = npm test 全绿 44 tests + build 0
 - 审查-修复轮次: 0
 - 未解决反馈: 无
-- 协调者裁决: Step 5 localhost 真实剪贴板验证移交 verify 阶段；本任务以 happy-dom 测试（含回退路径与反馈）+ build 替代
+- 协调者裁决: Step 4 浏览器手动验证以 happy-dom 测试 + build 替代，真实浏览器冒烟移交 verify 阶段
 
 ## 已完成任务
 
@@ -27,3 +27,4 @@
 - Task 7: complete (commits e2be71f..82b166b, RED/GREEN 齐全, 34/34 PASS, checkoff PASS)
 - Task 8: complete (commits c96be04..74daef0, RED/GREEN 齐全, 37/37 PASS + build 0, checkoff PASS)
 - Task 9: complete (commits 1d92bfd..590a188, RED/GREEN 齐全, 39/39 PASS + build 0, checkoff PASS)
+- Task 10: complete (commits 6d12908..39d6ad5, RED/GREEN 齐全, 43/43 PASS + build 0, checkoff PASS)
