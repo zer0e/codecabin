@@ -421,7 +421,7 @@ git commit -m "feat: JSON 字符串转义/去转义纯函数与单测"
 - Consumes: Task 5 的 `escapeText`、`unescapeText`；Task 4 的行为约定与 `mountTemplate`
 - Produces: DOM id 约定——面板根 `#panel-escape`；输入 `#escape-input`、按钮 `#escape-escape`（转义）/ `#escape-unescape`（去转义）、输出 `#escape-output`、错误区 `#escape-error`（class `error`）；`renderApp` 现挂载 JSON + 转义两个面板。
 
-- [ ] **Step 1: 在 `src/ui/panels.test.ts` 追加失败测试**
+- [x] **Step 1: 在 `src/ui/panels.test.ts` 追加失败测试**
 
 ```ts
 describe('转义面板', () => {
@@ -447,23 +447,23 @@ describe('转义面板', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/ui/panels.test.ts` → Expected: 新增 3 用例 FAIL（选择器为 null）。
 
-- [ ] **Step 3: 在 `panels.ts` 增加转义面板**
+- [x] **Step 3: 在 `panels.ts` 增加转义面板**
 
 复用 JSON 面板的结构模式：模板静态、事件绑定走行为约定、按钮调 `escapeText`/`unescapeText`、`renderApp` 追加挂载。静态文案「转义」「去转义」。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npm test` → Expected: 全部 PASS。
 
-- [ ] **Step 5: dev 服务器手动验证**
+- [x] **Step 5: dev 服务器手动验证**
 
 对照 spec 场景「含特殊字符文本转义」「转义输出不含首尾引号」「转义往返一致」「非法转义输入」「含首尾引号的输入可还原」「真实换行视为转义换行」逐条操作确认。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/ui/panels.ts src/ui/panels.test.ts
