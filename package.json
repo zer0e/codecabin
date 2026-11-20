@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "@fission-ai/openspec": "^2.1.0"
   },
   "devDependencies": {
+    "happy-dom": "^21.0.4",
+    "typescript": "^5",
     "vite": "^7",
-    "typescript": "^5"
+    "vitest": "^5.1.1"
   }
 }
