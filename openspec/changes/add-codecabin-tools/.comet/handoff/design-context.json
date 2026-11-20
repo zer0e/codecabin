@@ -1,0 +1,14 @@
+{
+  "change": "add-codecabin-tools",
+  "phase": "design",
+  "mode": "compact",
+  "canonical_spec": "openspec",
+  "generated_by": "comet-handoff.sh",
+  "context_hash": "4a60ebf173f3823842778a0341ae648a8e6ddb413c40436bcf76c9af9529c513",
+  "files": [
+    { "path": "openspec/changes/add-codecabin-tools/proposal.md", "sha256": "fd6592515023452b7800c46edbf0e5b2f8b88cfd49cb86b87c2451f64e041120" },
+    { "path": "openspec/changes/add-codecabin-tools/design.md", "sha256": "1a12c18048475594328f596e1e10e8244fde887100d6f40afa43b31ef5e99f07" },
+    { "path": "openspec/changes/add-codecabin-tools/tasks.md", "sha256": "232747348f4f6c4b66f0e7953543a644525fde5ef1413e6c9477a5ac8554c551" },
+    { "path": "openspec/changes/add-codecabin-tools/specs/json-base64-tools/spec.md", "sha256": "b9e7e25936fadadcdfd330bc82ddcf272b02538ed3454ce97d2ee4162a62d5c8" }
+  ]
+}
