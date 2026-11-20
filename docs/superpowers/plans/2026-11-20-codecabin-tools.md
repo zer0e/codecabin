@@ -570,7 +570,7 @@ git commit -m "feat: Base64 UTF-8 编解码纯函数与单测"
 - Consumes: Task 7 的 `encodeBase64`、`decodeBase64`
 - Produces: DOM id 约定——面板根 `#panel-base64`；输入 `#base64-input`、模式选择 `#base64-mode`（select，value `"standard"`/`"urlsafe"`，默认 standard）、按钮 `#base64-encode` / `#base64-decode`、输出 `#base64-output`、错误区 `#base64-error`；`renderApp` 现挂载全部三个面板。
 
-- [ ] **Step 1: 追加失败测试**
+- [x] **Step 1: 追加失败测试**
 
 ```ts
 describe('Base64 面板', () => {
@@ -597,23 +597,23 @@ describe('Base64 面板', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/ui/panels.test.ts` → Expected: 新增 3 用例 FAIL。
 
-- [ ] **Step 3: 在 `panels.ts` 增加 Base64 面板**
+- [x] **Step 3: 在 `panels.ts` 增加 Base64 面板**
 
 复用既有面板结构模式；编码/解码按钮读取 `#base64-mode` 当前值作为 `mode` 实参；静态文案「编码」「解码」「标准」「URL-safe」。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npm test` → Expected: 全部 PASS。
 
-- [ ] **Step 5: dev 服务器手动验证**
+- [x] **Step 5: dev 服务器手动验证**
 
 对照 spec 场景「中文与 emoji 编码」「编解码往返一致」「非法 Base64 输入」「含空白与换行的输入可解码」「缺失 padding 可解码」「URL-safe 编码与解码」「URL-safe 输出无 padding 且可解码」逐条确认。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/ui/panels.ts src/ui/panels.test.ts
