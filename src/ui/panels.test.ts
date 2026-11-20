@@ -39,3 +39,25 @@ describe('JSON 面板', () => {
     expect(r.querySelector('#json-error')!.textContent).toContain('<img');
   });
 });
+
+describe('转义面板', () => {
+  it('转义输出不含首尾引号', () => {
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#escape-input')!.value = 'hello';
+    r.querySelector<HTMLButtonElement>('#escape-escape')!.click();
+    expect(r.querySelector<HTMLTextAreaElement>('#escape-output')!.value).toBe('hello');
+  });
+  it('含特殊字符文本转义为 \\\" \\\\ \\n 形式', () => {
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#escape-input')!.value = 'a"b\\c\nd';
+    r.querySelector<HTMLButtonElement>('#escape-escape')!.click();
+    expect(r.querySelector<HTMLTextAreaElement>('#escape-output')!.value).toBe('a\\"b\\\\c\\nd');
+  });
+  it('去转义非法输入 \\q：错误可读、不清输入', () => {
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#escape-input')!.value = 'a\\qb';
+    r.querySelector<HTMLButtonElement>('#escape-unescape')!.click();
+    expect(r.querySelector('#escape-error')!.textContent).toContain('去转义失败');
+    expect(r.querySelector<HTMLTextAreaElement>('#escape-output')!.value).toBe('');
+  });
+});
