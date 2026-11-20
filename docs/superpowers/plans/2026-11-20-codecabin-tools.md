@@ -632,7 +632,7 @@ git commit -m "feat: Base64 工具面板 UI"
 - Consumes: `renderApp` 现挂载的三个面板根（`#panel-json`、`#panel-escape`、`#panel-base64`）
 - Produces: Tab 契约——`renderApp` 顶部渲染 nav，含三个 `<button class="tab" data-tab="json|escape|base64" aria-selected>`；默认激活 json；切换时未激活面板根加 `hidden` 属性、激活面板移除，并同步 `aria-selected`；面板 DOM 永不销毁（三面板同时挂载，仅 hidden 切换）。
 
-- [ ] **Step 1: 追加失败测试**
+- [x] **Step 1: 追加失败测试**
 
 ```ts
 describe('Tab 切换', () => {
@@ -655,23 +655,23 @@ describe('Tab 切换', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/ui/panels.test.ts` → Expected: 新增 2 用例 FAIL（无 `[data-tab]`）。
 
-- [ ] **Step 3: 在 `panels.ts` 实现 Tab**
+- [x] **Step 3: 在 `panels.ts` 实现 Tab**
 
 `renderApp` 依次 append：tab nav（静态模板）→ 三面板根 → 绑定点击切 `hidden` 与 `aria-selected`。不引入状态序列化——保留即因为同一 DOM 节点始终挂载。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npm test` → Expected: 全部 PASS。
 
-- [ ] **Step 5: dev 服务器手动验证**
+- [x] **Step 5: dev 服务器手动验证**
 
 对照 spec 场景「切换后返回」确认输入保留。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/ui/panels.ts src/ui/panels.test.ts
