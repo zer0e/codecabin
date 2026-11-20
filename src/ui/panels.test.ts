@@ -61,3 +61,26 @@ describe('转义面板', () => {
     expect(r.querySelector<HTMLTextAreaElement>('#escape-output')!.value).toBe('');
   });
 });
+
+describe('Base64 面板', () => {
+  it('标准模式编码中文 emoji', () => {
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#base64-input')!.value = '你好\u{1F30D}';
+    r.querySelector<HTMLButtonElement>('#base64-encode')!.click();
+    expect(r.querySelector<HTMLTextAreaElement>('#base64-output')!.value).toBe('5L2g5aW98J+MjQ==');
+  });
+  it('URL-safe 模式输出无 + / =', () => {
+    const r = setup();
+    r.querySelector<HTMLSelectElement>('#base64-mode')!.value = 'urlsafe';
+    r.querySelector<HTMLTextAreaElement>('#base64-input')!.value = 'a\uFFFFb';
+    r.querySelector<HTMLButtonElement>('#base64-encode')!.click();
+    expect(r.querySelector<HTMLTextAreaElement>('#base64-output')!.value).toBe('Ye-_v2I');
+  });
+  it('非法 Base64 解码错误可读且不清输入', () => {
+    const r = setup();
+    r.querySelector<HTMLTextAreaElement>('#base64-input')!.value = '!!!not-base64!!!';
+    r.querySelector<HTMLButtonElement>('#base64-decode')!.click();
+    expect(r.querySelector('#base64-error')!.textContent).toContain('非法 Base64 字符');
+    expect(r.querySelector<HTMLTextAreaElement>('#base64-input')!.value).toBe('!!!not-base64!!!');
+  });
+});

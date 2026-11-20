@@ -1,6 +1,7 @@
+import { decodeBase64, encodeBase64 } from '../tools/base64';
 import { escapeText, unescapeText } from '../tools/escape';
 import { formatJson, minifyJson } from '../tools/json';
-import type { ToolResult } from '../tools/types';
+import type { Base64Mode, ToolResult } from '../tools/types';
 import { mountTemplate } from './render';
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
@@ -85,7 +86,51 @@ function bindEscapePanel(panel: HTMLElement): void {
   });
 }
 
-/** 挂载当前已完成的面板（本 Task 后为 JSON + 转义两个面板）。 */
+// 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
+const base64PanelHtml = `
+<section id="panel-base64" class="panel">
+  <h2>Base64 编码 / 解码</h2>
+  <label for="base64-input">输入</label>
+  <textarea id="base64-input" rows="8" placeholder="在此粘贴文本"></textarea>
+  <label for="base64-mode">模式</label>
+  <select id="base64-mode">
+    <option value="standard" selected>标准</option>
+    <option value="urlsafe">URL-safe</option>
+  </select>
+  <button id="base64-encode" type="button">编码</button>
+  <button id="base64-decode" type="button">解码</button>
+  <label for="base64-output">输出</label>
+  <textarea id="base64-output" rows="8" readonly></textarea>
+  <div id="base64-error" class="error"></div>
+</section>
+`;
+
+function bindBase64Panel(panel: HTMLElement): void {
+  const input = panel.querySelector<HTMLTextAreaElement>('#base64-input')!;
+  const mode = panel.querySelector<HTMLSelectElement>('#base64-mode')!;
+  const output = panel.querySelector<HTMLTextAreaElement>('#base64-output')!;
+  const error = panel.querySelector<HTMLDivElement>('#base64-error')!;
+
+  // 行为约定：ok → 输出结果并清空错误区；error → 清空输出并展示文案；任何分支不清用户输入。
+  const apply = (result: ToolResult): void => {
+    if (result.ok) {
+      output.value = result.value;
+      error.textContent = '';
+    } else {
+      output.value = '';
+      error.textContent = result.error;
+    }
+  };
+
+  panel.querySelector<HTMLButtonElement>('#base64-encode')!.addEventListener('click', () => {
+    apply(encodeBase64(input.value, mode.value as Base64Mode));
+  });
+  panel.querySelector<HTMLButtonElement>('#base64-decode')!.addEventListener('click', () => {
+    apply(decodeBase64(input.value, mode.value as Base64Mode));
+  });
+}
+
+/** 挂载当前已完成的面板（本 Task 后为 JSON + 转义 + Base64 三个面板）。 */
 export function renderApp(root: HTMLElement): void {
   const panel = mountTemplate(jsonPanelHtml);
   bindJsonPanel(panel);
@@ -94,4 +139,8 @@ export function renderApp(root: HTMLElement): void {
   const escapePanel = mountTemplate(escapePanelHtml);
   bindEscapePanel(escapePanel);
   root.append(escapePanel);
+
+  const base64Panel = mountTemplate(base64PanelHtml);
+  bindBase64Panel(base64Panel);
+  root.append(base64Panel);
 }
