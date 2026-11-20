@@ -2,6 +2,7 @@
 change: add-codecabin-tools
 design-doc: docs/superpowers/specs/2026-11-20-codecabin-tools-design.md
 base-ref: d7b4561546acd00a77d5c5f066b7dbe446437c7b
+archived-with: 2026-11-20-add-codecabin-tools
 ---
 
 # Codecabin 工具页实施计划
@@ -62,6 +63,7 @@ spec 隐含但单列任务未必自然覆盖、最可能伤到使用者的输入
 4. **HTML/脚本注入面**：粘贴含 `<img src=x onerror=...>` 的输入后，输出区与错误区只呈现纯文本，DOM 中不出现被解析的标签元素。→ Task 4（纪律适用于全部面板）。
 5. **字面反斜杠序列**：输入同时含真实换行与字面 `\n` 两字符时，转义→去转义往返必须逐字符一致，字面反斜杠不得被宽容预处理吃掉。→ Task 5。
 
+archived-with: 2026-11-20-add-codecabin-tools
 ---
 
 ## 第 1 组：项目骨架

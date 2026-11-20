@@ -2,6 +2,8 @@
 comet_change: add-codecabin-tools
 role: technical-design
 canonical_spec: openspec
+archived-with: 2026-11-20-add-codecabin-tools
+status: final
 ---
 
 # Codecabin 工具页深度设计
