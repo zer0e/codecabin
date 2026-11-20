@@ -73,7 +73,7 @@ index.html（空壳，仅挂载点）
 - `json.ts`：`formatJson(input, indent: 2|4)`、`minifyJson(input)`。实现：`JSON.parse` 后 `JSON.stringify(value, null, indent)` / `JSON.stringify(value)`。
 - `escape.ts`：
   - `escapeText(input)`：`JSON.stringify(input).slice(1, -1)`（输出**不含**首尾引号）。
-  - `unescapeText(input)`：宽容预处理后 `JSON.parse('"' + processed + '"')`。预处理顺序：① 若首尾为成对双引号则去除；② 真实换行 `\r\n`/`\r`/`\n` → `\n` 转义序列；③ 其余裸控制字符（U+0000–U+001F）→ `\uXXXX`；④ 交给 JSON.parse 报告非法转义（如 `\q`）。
+  - `unescapeText(input)`：宽容预处理后 `JSON.parse('"' + processed + '"')`。预处理顺序：① 若首尾为成对双引号则去除；② 真实换行 `\r\n`/`\r`/`\n` → `\n` 转义序列（游程感知：紧邻换行的反斜杠游程为奇数时报错，偶数时保留游程后替换）；③ 其余裸控制字符（U+0000–U+001F）→ `\uXXXX`；④ 交给 JSON.parse 报告非法转义（如 `\q`）。
 - `base64.ts`：`encodeBase64(input, mode: 'standard'|'urlsafe')`、`decodeBase64(input, mode)`。
   - 编码：TextEncoder → 字节 → binary string → btoa；urlsafe 模式替换 `+`→`-`、`/`→`_` 并去除 `=` padding。
   - 解码：① 去除全部空白字符；② urlsafe 模式还原 `-`→`+`、`_`→`/`；③ 按模 4 补齐 `=`；④ 字符集校验后 atob → 字节 → `new TextDecoder('utf-8', { fatal: true })` 捕获非法 UTF-8。
@@ -88,10 +88,11 @@ index.html（空壳，仅挂载点）
 ## 边界语义（宽容策略，用户确认）
 
 - 转义输出不含首尾引号；去转义兼容含/不含引号输入
-- 去转义将真实换行视为 `\n`
+- 去转义将真实换行视为 `\n`；**换行前反斜杠游程感知**：奇数游程紧邻真实换行属非法转义，报错而非静默改写（build 阶段最终审查 I-2 修复，已回写 spec 场景）
 - Base64 解码容忍空白/换行、缺失 padding
+- Base64 解码保留开头 BOM（U+FEFF）：TextDecoder 设 ignoreBOM:true，保证往返逐字符一致（build 阶段最终审查 I-1 修复，已回写 spec 场景）
 - URL-safe 编码去除 padding，解码兼容有/无 padding
-- 真正非法输入（`\q`、非法 Base64 字符、非法 UTF-8 字节）报错
+- 真正非法输入（`\q`、非法 Base64 字符、非法 UTF-8 字节、奇数游程+真实换行）报错
 - 往返一致性在全部宽容规则下保持
 
 对应验收场景已回写 delta spec（Spec Patch，见 brainstorm-summary.md）。
