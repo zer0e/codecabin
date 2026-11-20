@@ -264,7 +264,7 @@ git commit -m "feat: JSON 格式化/压缩纯函数与单测"
   - DOM id 约定：面板根 `#panel-json`；输入 `#json-input`（textarea）、缩进选择 `#json-indent`（select，option value `"2"`/`"4"`，默认 2）、按钮 `#json-format` / `#json-minify`、输出 `#json-output`（只读 textarea）、错误区 `#json-error`（div，class `error`）。
   - 行为约定（三面板统一）：点击动作按钮 → 读 `input.value` → 调纯函数 → ok：`output.value = result.value` 且 `error.textContent = ''`；error：`output.value = ''` 且 `error.textContent = result.error`；任何分支都不清空用户输入。
 
-- [ ] **Step 1: 写失败测试 `src/ui/panels.test.ts`**
+- [x] **Step 1: 写失败测试 `src/ui/panels.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -310,23 +310,23 @@ describe('JSON 面板', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/ui/panels.test.ts` → Expected: FAIL（`panels.ts` 不存在）。
 
-- [ ] **Step 3: 实现 `render.ts` 与 `panels.ts`（JSON 面板）并接线 `main.ts`**
+- [x] **Step 3: 实现 `render.ts` 与 `panels.ts`（JSON 面板）并接线 `main.ts`**
 
 `render.ts` 按 Interfaces 实现（`<template>.innerHTML = html` 取 `content.firstElementChild`，仅承载静态结构）。`panels.ts`：JSON 面板模板（标题、textarea、select、按钮、输出、错误区，全部静态 id/class），事件绑定按行为约定；`#json-output` 设 `readonly`；静态文案用中文（「格式化」「压缩」「缩进」等）。`main.ts` 改为 `renderApp(document.querySelector('#app')!)`。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npx vitest run src/ui/panels.test.ts` → Expected: PASS（4 tests）；`npm test` 全绿。
 
-- [ ] **Step 5: dev 服务器手动验证**
+- [x] **Step 5: dev 服务器手动验证**
 
 Run: `npm run dev`，浏览器执行 spec 场景「压缩 JSON 美化」「切换缩进宽度」「非法 JSON 格式化」→ Expected: 与场景逐条一致。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/ui/render.ts src/ui/panels.ts src/ui/panels.test.ts src/main.ts
