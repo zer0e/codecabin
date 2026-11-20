@@ -134,11 +134,11 @@ git commit -m "chore: 初始化 Vite + 原生 TypeScript 项目骨架"
 - Consumes: Task 1 的 `vite.config.ts`
 - Produces: `npm test` 命令 = `vitest run`；全局测试环境 `happy-dom`；后续 UI 测试直接 `import { describe, it, expect, vi } from 'vitest'`（不依赖 globals）。
 
-- [ ] **Step 1: 安装 devDependencies 并加 script**
+- [x] **Step 1: 安装 devDependencies 并加 script**
 
 `npm i -D vitest happy-dom`；`package.json` scripts 增加 `"test": "vitest run"`。
 
-- [ ] **Step 2: 写冒烟测试 `src/sanity.test.ts`**
+- [x] **Step 2: 写冒烟测试 `src/sanity.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -156,7 +156,7 @@ describe('测试环境', () => {
 });
 ```
 
-- [ ] **Step 3: 在 `vite.config.ts` 加 Vitest 配置**
+- [x] **Step 3: 在 `vite.config.ts` 加 Vitest 配置**
 
 文件头加 `/// <reference types="vitest/config" />`，`defineConfig` 增加：
 
@@ -167,11 +167,11 @@ test: {
 }
 ```
 
-- [ ] **Step 4: 运行验证**
+- [x] **Step 4: 运行验证**
 
 Run: `npm test` → Expected: 2 个测试 PASS。
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add package.json package-lock.json vite.config.ts src/sanity.test.ts

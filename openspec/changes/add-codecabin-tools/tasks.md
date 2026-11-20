@@ -3,7 +3,7 @@
 ## 1. 项目骨架
 
 - [x] 1.1 初始化 Vite + 原生 TypeScript 项目（package.json、vite.config.ts、tsconfig.json、index.html、src/main.ts），验证 `npm run dev` 可启动、`npm run build` 成功
-- [ ] 1.2 接入 Vitest（配置 + 一个冒烟测试），验证 `npm test` 通过
+- [x] 1.2 接入 Vitest（配置 + 一个冒烟测试），验证 `npm test` 通过
 
 ## 2. JSON 格式化/压缩
 

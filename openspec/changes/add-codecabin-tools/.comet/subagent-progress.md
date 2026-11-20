@@ -7,14 +7,14 @@
 
 ## 当前任务
 
-- Plan task: `### Task 1: 初始化 Vite + 原生 TypeScript 项目（对应 tasks.md 1.1）`
-- OpenSpec task: `- [ ] 1.1 初始化 Vite + 原生 TypeScript 项目（package.json、vite.config.ts、tsconfig.json、index.html、src/main.ts），验证 \`npm run dev\` 可启动、\`npm run build\` 成功`
-- 阶段: implementing（implementer 已派发，BASE=95b3ece）
+- Plan task: `### Task 2: 接入 Vitest + happy-dom（对应 tasks.md 1.2）`
+- OpenSpec task: `- [ ] 1.2 接入 Vitest（配置 + 一个冒烟测试），验证 \`npm test\` 通过`
+- 阶段: implementing
 - 实现提交: （待回报）
-- RED/GREEN: T1 为骨架任务，以命令可观察结果为验收（build 退出码 0 + dev curl 命中）
+- RED/GREEN: T2 为骨架类任务，以命令可观察结果为验收（npm test 2 例 PASS）
 - 审查-修复轮次: 0
 - 未解决反馈: 无
 
 ## 已完成任务
 
-（无）
+- Task 1: complete (commits 95b3ece..923b260, checkoff PASS)
