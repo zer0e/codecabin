@@ -192,9 +192,9 @@ git commit -m "test: 接入 Vitest + happy-dom 冒烟测试"
   - `json.ts`：`export function formatJson(input: string, indent?: 2 | 4): ToolResult`（默认 `indent = 2`）；`export function minifyJson(input: string): ToolResult`
   - 错误文案前缀固定为 `JSON 解析失败：`，其后附 `JSON.parse` 原始 message。
 
-- [ ] **Step 1: 创建 `src/tools/types.ts`**（内容即上方 Interfaces 所示）
+- [x] **Step 1: 创建 `src/tools/types.ts`**（内容即上方 Interfaces 所示）
 
-- [ ] **Step 2: 写失败测试 `src/tools/json.test.ts`**
+- [x] **Step 2: 写失败测试 `src/tools/json.test.ts`**
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -231,19 +231,19 @@ describe('minifyJson', () => {
 });
 ```
 
-- [ ] **Step 3: 运行确认失败**
+- [x] **Step 3: 运行确认失败**
 
 Run: `npx vitest run src/tools/json.test.ts` → Expected: FAIL（模块不存在）。
 
-- [ ] **Step 4: 实现 `src/tools/json.ts`**
+- [x] **Step 4: 实现 `src/tools/json.ts`**
 
 实现即设计契约：`JSON.parse` 后 `JSON.stringify(value, null, indent)` / `JSON.stringify(value)`，try/catch 包 `JSON.parse`，catch 返回 `{ ok: false, error: 'JSON 解析失败：' + (e as Error).message }`。不向调用方抛异常。
 
-- [ ] **Step 5: 运行确认通过**
+- [x] **Step 5: 运行确认通过**
 
 Run: `npx vitest run src/tools/json.test.ts` → Expected: PASS（6 tests）。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/tools/types.ts src/tools/json.ts src/tools/json.test.ts
