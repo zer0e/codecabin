@@ -1,1 +1,3 @@
-document.querySelector('#app')!.textContent = 'Codecabin'
+import { renderApp } from './ui/panels';
+
+renderApp(document.querySelector<HTMLElement>('#app')!);
