@@ -7,14 +7,14 @@
 
 ## 当前任务
 
-- Plan task: `### Task 11: 统一错误展示样式与页面基础样式（对应 tasks.md 5.3）`
-- OpenSpec task: `- [ ] 5.3 统一错误展示样式与页面基础样式（中文文案），验证三个工具非法输入均展示可读错误且页面不崩溃`
-- 阶段: implementing
-- 实现提交: （待回报）
-- RED/GREEN: 纪律回归测试可能首跑即 PASS（计划明示，见 ledger Ruling）；GREEN = npm test 全绿 44 tests + build 0
+- Plan task: `### Task 12: 全量验证（对应 tasks.md 6.1）`
+- OpenSpec task: `- [ ] 6.1 全量验证：\`npm test\` 全部通过、\`npm run build\` 成功，逐条对照 specs/json-base64-tools/spec.md 的验收场景在浏览器中确认（含本地处理无网络请求：DevTools Network 面板无转换相关请求）`
+- 阶段: implementing（验证任务）
+- 实现提交: （待回报；预期无代码改动）
+- 证据: npm test 全绿 + build 0 + grep innerHTML 仅 render.ts 静态模板一处 + 场景覆盖对照表
 - 审查-修复轮次: 0
 - 未解决反馈: 无
-- 协调者裁决: Step 4 浏览器手动验证以 happy-dom 测试 + build 替代，真实浏览器冒烟移交 verify 阶段
+- 协调者裁决: 场景计数以 canonical spec 为准（20 个，非计划过时的 11）；真实浏览器/DevTools 步骤移交 comet-verify 阶段，implementer 产出自动化验证 + 场景覆盖对照 + 浏览器待验清单
 
 ## 已完成任务
 
@@ -28,3 +28,4 @@
 - Task 8: complete (commits c96be04..74daef0, RED/GREEN 齐全, 37/37 PASS + build 0, checkoff PASS)
 - Task 9: complete (commits 1d92bfd..590a188, RED/GREEN 齐全, 39/39 PASS + build 0, checkoff PASS)
 - Task 10: complete (commits 6d12908..39d6ad5, RED/GREEN 齐全, 43/43 PASS + build 0, checkoff PASS)
+- Task 11: complete (commits 9f39e19..bfdf4c7, 44/44 PASS + build 0, checkoff PASS)

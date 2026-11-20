@@ -819,27 +819,27 @@ git commit -m "style: 统一错误展示与页面基础样式"
 - Consumes: Task 1–11 全部产物
 - Produces: 验收结论（供协调者进入 verify 阶段）
 
-- [ ] **Step 1: 全量测试**
+- [x] **Step 1: 全量测试**
 
 Run: `npm test` → Expected: 全部 PASS（tools 单测 + UI 行为测试 + 冒烟）。
 
-- [ ] **Step 2: 生产构建**
+- [x] **Step 2: 生产构建**
 
 Run: `npm run build` → Expected: 退出码 0。
 
-- [ ] **Step 3: 浏览器逐场景验收**
+- [x] **Step 3: 浏览器逐场景验收**
 
 Run: `npm run dev`，对照 `openspec/changes/add-codecabin-tools/specs/json-base64-tools/spec.md` 全部 11 个 Scenario 逐条在浏览器中执行确认（复制场景在 localhost 安全上下文验证真实剪贴板写入）。
 
-- [ ] **Step 4: 无网络请求确认**
+- [x] **Step 4: 无网络请求确认**
 
 在 DevTools Network 面板（Disable cache 保持关闭、仅观察）执行三个工具的任意转换操作组合 → Expected: 无与转换内容相关的网络请求（除 Vite HMR/静态资源加载本身外无 XHR/fetch），输入数据不出现在任何出站请求中。
 
-- [ ] **Step 5: 反目标抽查**
+- [x] **Step 5: 反目标抽查**
 
 确认代码中用户数据未经 `innerHTML` 拼接（`grep -rn "innerHTML" src/` 仅命中 `render.ts` 的静态模板一处）；非法输入均走错误分支不崩溃。
 
-- [ ] **Step 6: 收尾提交（如有样式/文案微调）**
+- [x] **Step 6: 收尾提交（如有样式/文案微调）**
 
 ```bash
 git status  # 应为 clean；如有修复，按对应 Task 的 commit 规范提交

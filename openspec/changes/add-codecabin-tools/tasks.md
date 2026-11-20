@@ -28,7 +28,7 @@
 
 ## 6. 整体验收
 
-- [ ] 6.1 全量验证：`npm test` 全部通过、`npm run build` 成功，逐条对照 specs/json-base64-tools/spec.md 的验收场景在浏览器中确认（含本地处理无网络请求：DevTools Network 面板无转换相关请求）
+- [x] 6.1 全量验证：`npm test` 全部通过、`npm run build` 成功，逐条对照 specs/json-base64-tools/spec.md 的验收场景在浏览器中确认（含本地处理无网络请求：DevTools Network 面板无转换相关请求）
 
 ## Workflow follow-up
 
