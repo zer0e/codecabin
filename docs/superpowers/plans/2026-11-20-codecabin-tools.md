@@ -689,7 +689,7 @@ git commit -m "feat: Tab 切换骨架（面板常驻、hidden 切换）"
 - Consumes: 三面板的 `#*-output` 与面板根
 - Produces: `clipboard.ts`：`export function copyText(text: string, button: HTMLButtonElement): Promise<void>`——空文本直接反馈「无内容可复制」；否则优先 `navigator.clipboard.writeText`，不可用或 reject 时回退临时 textarea + `document.execCommand('copy')`；成功反馈「已复制」、失败反馈「复制失败：<原因>」，均在 1500ms 后恢复按钮原文「复制」。DOM id 新增：`#json-copy`、`#escape-copy`、`#base64-copy`（`<button class="copy">复制</button>`，位于各输出区旁）。
 
-- [ ] **Step 1: 追加失败测试**（置于 `src/ui/panels.test.ts`，顶部 import 补充 `vi`；使用真实计时器 + `vi.waitFor`，不要开 fake timers——恢复计时 1500ms 与 waitFor 的自动推进会互相竞争）
+- [x] **Step 1: 追加失败测试**（置于 `src/ui/panels.test.ts`，顶部 import 补充 `vi`；使用真实计时器 + `vi.waitFor`，不要开 fake timers——恢复计时 1500ms 与 waitFor 的自动推进会互相竞争）
 
 ```ts
 describe('一键复制', () => {
@@ -739,23 +739,23 @@ describe('一键复制', () => {
 });
 ```
 
-- [ ] **Step 2: 运行确认失败**
+- [x] **Step 2: 运行确认失败**
 
 Run: `npx vitest run src/ui/panels.test.ts -t '一键复制'` → Expected: FAIL（无 `#json-copy`）。
 
-- [ ] **Step 3: 实现 `clipboard.ts` 并在三面板接线**
+- [x] **Step 3: 实现 `clipboard.ts` 并在三面板接线**
 
 回退实现：创建临时 textarea 设 `value = text`、选中、`document.execCommand('copy')`、移除；execCommand 返回 false 视为失败。反馈恢复用 `setTimeout(…, 1500)`。
 
-- [ ] **Step 4: 运行确认通过**
+- [x] **Step 4: 运行确认通过**
 
 Run: `npm test` → Expected: 全部 PASS。
 
-- [ ] **Step 5: localhost 浏览器验证**
+- [x] **Step 5: localhost 浏览器验证**
 
 `npm run dev`（localhost 即安全上下文）：有输出时点复制 → 系统剪贴板实际收到内容、按钮出现「已复制」；在 DevTools 将 `navigator.clipboard` 置为 undefined 复现回退路径 → 「已复制」或明确「复制失败」反馈。对照 spec 场景「复制成功」。
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/ui/clipboard.ts src/ui/panels.ts src/ui/panels.test.ts
