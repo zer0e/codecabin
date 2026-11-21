@@ -1,4 +1,5 @@
-/* 全站基础样式：简洁中文界面，纯浏览器端工具页。 */
+/* 全站基础样式：简洁中文界面，纯浏览器端工具页。
+   色值全部走 :root 设计令牌；暗色主题经 prefers-color-scheme 自动跟随系统。 */
 
 /* 防 CSS 覆盖 hidden 属性：面板切换依赖 hidden，必须最高优先级。 */
 [hidden] {
@@ -9,6 +10,44 @@
   box-sizing: border-box;
 }
 
+:root {
+  color-scheme: light;
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-muted: #f8f9fa;
+  --text: #2c3e50;
+  --text-muted: #57606f;
+  --border: #dcdfe4;
+  --border-strong: #c8ccd2;
+  --hover: #e8eaee;
+  --accent: #2c3e50;
+  --focus-ring: #4a6fa5;
+  --error-bg: #fdecea;
+  --error-text: #c0392b;
+  --error-border: #f2c4bd;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #16161e;
+    --surface: #1e1e2e;
+    --surface-muted: #181825;
+    --text: #e6e6ef;
+    --text-muted: #a6adc8;
+    --border: #313244;
+    --border-strong: #45475a;
+    --hover: #2a2a3c;
+    --accent: #89b4fa;
+    --focus-ring: #89b4fa;
+    --error-bg: #3a1f24;
+    --error-text: #f38ba8;
+    --error-border: #5c2b33;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+
 body {
   margin: 0;
   padding: 24px 16px;
@@ -17,8 +56,8 @@ body {
     'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
   font-size: 15px;
   line-height: 1.6;
-  color: #2c3e50;
-  background: #f5f6f8;
+  color: var(--text);
+  background: var(--bg);
 }
 
 /* 居中布局：内容限宽、水平居中 */
@@ -27,34 +66,52 @@ body {
   margin: 0 auto;
 }
 
-/* Tab 导航 */
+/* 品牌头部（纯静态文案） */
+.app-header {
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.app-header .tagline {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Tab 导航：下划线指示激活态 */
 nav.tabs {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 16px;
-  border-bottom: 1px solid #dcdfe4;
-  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
 }
 
 nav .tab {
-  padding: 6px 16px;
-  border: 1px solid transparent;
-  border-radius: 6px;
+  padding: 8px 16px;
+  margin-bottom: -1px;
+  border: none;
+  border-bottom: 2px solid transparent;
   background: transparent;
   font: inherit;
-  color: #57606f;
+  color: var(--text-muted);
   cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 nav .tab:hover {
-  background: #e8eaee;
+  color: var(--text);
+  background: var(--hover);
 }
 
 /* 激活态 Tab */
 nav .tab[aria-selected='true'] {
-  background: #2c3e50;
-  border-color: #2c3e50;
-  color: #ffffff;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
   font-weight: 600;
 }
 
@@ -64,9 +121,10 @@ nav .tab[aria-selected='true'] {
   flex-direction: column;
   gap: 8px;
   padding: 20px;
-  background: #ffffff;
-  border: 1px solid #dcdfe4;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
+  box-shadow: var(--shadow);
 }
 
 .panel h2 {
@@ -75,8 +133,9 @@ nav .tab[aria-selected='true'] {
 }
 
 .panel label {
+  margin-top: 4px;
   font-weight: 600;
-  color: #57606f;
+  color: var(--text-muted);
 }
 
 /* 输入/输出区：等宽字体、合理尺寸 */
@@ -84,8 +143,10 @@ textarea {
   width: 100%;
   min-height: 160px;
   padding: 10px;
-  border: 1px solid #c8ccd2;
+  border: 1px solid var(--border-strong);
   border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo,
     'Courier New', monospace;
   font-size: 14px;
@@ -94,14 +155,16 @@ textarea {
 }
 
 textarea[readonly] {
-  background: #f8f9fa;
+  background: var(--surface-muted);
 }
 
 select {
   align-self: flex-start;
-  padding: 4px 8px;
-  border: 1px solid #c8ccd2;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
   border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
   font: inherit;
 }
 
@@ -110,33 +173,66 @@ select {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  margin-top: 4px;
 }
 
 button {
   padding: 6px 16px;
-  border: 1px solid #c8ccd2;
+  border: 1px solid var(--border-strong);
   border-radius: 6px;
-  background: #ffffff;
+  background: var(--surface);
   font: inherit;
-  color: #2c3e50;
+  color: var(--text);
   cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
 button:hover {
-  background: #eef0f3;
+  background: var(--hover);
 }
 
+/* min-width 防止复制反馈文案切换时按钮宽度抖动 */
 button.copy {
   align-self: flex-start;
+  min-width: 88px;
+  text-align: center;
 }
 
-/* 统一错误展示：红色可读文案，非空才可见 */
+/* 键盘焦点统一描边 */
+button:focus-visible,
+nav .tab:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* 统一错误展示：告警条样式，非空才可见 */
 .error {
-  color: #c0392b;
+  padding: 8px 12px;
+  border: 1px solid var(--error-border);
+  border-radius: 6px;
+  background: var(--error-bg);
+  color: var(--error-text);
   font-size: 14px;
-  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 .error:empty {
   display: none;
+}
+
+/* 移动端收紧边距 */
+@media (max-width: 640px) {
+  body {
+    padding: 16px 12px;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  nav .tab {
+    padding: 8px 10px;
+  }
 }
