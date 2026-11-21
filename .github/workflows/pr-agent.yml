@@ -17,6 +17,9 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
+    env:
+      # LiteLLM 要求 OpenAI 兼容模型带 openai/ 前缀；变量里没写也能自动补齐
+      REVIEW_MODEL: ${{ startsWith(vars.PR_REVIEW_MODEL, 'openai/') && vars.PR_REVIEW_MODEL || format('openai/{0}', vars.PR_REVIEW_MODEL) }}
     steps:
       - name: PR-Agent review
         # 官方 SECURITY.md 推荐的双重钉定：直接用 digest 钉定的 v0.50.0 运行时镜像，
@@ -25,6 +28,8 @@ jobs:
         env:
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           OPENAI__API_BASE: ${{ vars.OPENAI_API_BASE }}
-          CONFIG__MODEL: ${{ vars.PR_REVIEW_MODEL }}
+          CONFIG__MODEL: ${{ env.REVIEW_MODEL }}
+          # fallback 与主模型一致，避免回退到端点不存在的默认模型（如 gpt-6-luna）
+          CONFIG__FALLBACK_MODELS: ${{ format('["{0}"]', env.REVIEW_MODEL) }}
           CONFIG__CUSTOM_MODEL_MAX_TOKENS: ${{ vars.PR_REVIEW_MAX_TOKENS || '32000' }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
