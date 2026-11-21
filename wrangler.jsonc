@@ -4,5 +4,8 @@
   "compatibility_date": "2026-11-21",
   "assets": {
     "directory": "./dist"
-  }
+  },
+  // PR 预览部署（wrangler preview）要求存在 previews 块，空块即可；
+  // assets/compatibility 等保持在顶层
+  "previews": {}
 }
