@@ -1,0 +1,12 @@
+# PR-Agent 行为配置（模型与端点经 workflow env 注入，见 .github/workflows/pr-agent.yml）
+
+[github_action_config]
+# 含 synchronize：每次向 PR 推送修复后自动重新审查，形成「审查 → 修复 → 再审」闭环
+pr_actions = ["opened", "reopened", "ready_for_review", "synchronize"]
+
+[pr_reviewer]
+extra_instructions = "请用中文输出审查意见；聚焦正确性、安全与边界条件，避免纯风格偏好类建议。"
+num_code_suggestions = 3
+
+[pr_description]
+extra_instructions = "请用中文输出 PR 描述。"

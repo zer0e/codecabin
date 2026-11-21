@@ -1,0 +1,30 @@
+# PR-Agent 自动审查：PR 开启/更新时自动 describe + review + improve。
+# 模型走 OpenAI 兼容端点（LiteLLM），配置全部经仓库 Secrets/Variables 注入：
+#   Secret:   OPENAI_KEY            — API 密钥
+#   Variable: OPENAI_API_BASE       — 兼容端点，如 https://api.example.com/v1
+#   Variable: PR_REVIEW_MODEL       — 模型 ID，须带 openai/ 前缀，如 openai/deepseek-chat
+#   Variable: PR_REVIEW_MAX_TOKENS  — 可选，模型上下文上限（默认 32000）
+name: PR Agent Review
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+
+jobs:
+  pr-agent:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: PR-Agent review
+        # 官方 SECURITY.md 推荐的双重钉定：直接用 digest 钉定的 v0.50.0 运行时镜像，
+        # 不经滚动 tag 的 wrapper action（The-PR-Agent/pr-agent，原 qodo-ai/pr-agent）
+        uses: docker://pragent/pr-agent@sha256:548e894a88071180832b2f4233f734d0acd0db1a879e2fcbaa70bac8b8372ebe
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          OPENAI__API_BASE: ${{ vars.OPENAI_API_BASE }}
+          CONFIG__MODEL: ${{ vars.PR_REVIEW_MODEL }}
+          CONFIG__CUSTOM_MODEL_MAX_TOKENS: ${{ vars.PR_REVIEW_MAX_TOKENS || '32000' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
