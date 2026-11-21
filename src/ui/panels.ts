@@ -6,6 +6,13 @@ import { copyText } from './clipboard';
 import { mountTemplate } from './render';
 
 // 静态模板：只含固定结构与中文文案，禁止拼接运行时数据。
+const headerHtml = `
+<header class="app-header">
+  <h1>Codecabin</h1>
+  <p class="tagline">全部转换在浏览器本地完成，不上传任何数据</p>
+</header>
+`;
+
 const jsonPanelHtml = `
 <section id="panel-json" class="panel" role="tabpanel">
   <h2>JSON 格式化 / 压缩</h2>
@@ -166,6 +173,8 @@ const tabNavHtml = `
 
 /** 挂载 Tab nav 与三个面板；面板 DOM 常驻，仅以 hidden 切换可见性（输入天然保留，不做状态序列化）。 */
 export function renderApp(root: HTMLElement): void {
+  root.append(mountTemplate(headerHtml));
+
   const nav = mountTemplate(tabNavHtml);
   root.append(nav);
 

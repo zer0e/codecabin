@@ -193,3 +193,19 @@ describe('错误展示统一', () => {
     }
   });
 });
+
+describe('品牌头部', () => {
+  it('header 位于 tab 导航之前，含静态标题与本地处理声明，不随用户输入变化', () => {
+    const r = setup();
+    const header = r.querySelector<HTMLElement>('.app-header')!;
+    expect(header).toBeTruthy();
+    expect(header.nextElementSibling!.matches('nav.tabs')).toBe(true);
+    expect(header.querySelector('h1')!.textContent).toBe('Codecabin');
+    expect(header.querySelector('.tagline')!.textContent).toContain('不上传');
+    // 静态文案不变量：用户输入（含 HTML 片段）不得进入 header
+    r.querySelector<HTMLTextAreaElement>('#json-input')!.value = '<b>inject</b>';
+    r.querySelector<HTMLButtonElement>('#json-format')!.click();
+    expect(header.querySelector('b')).toBeNull();
+    expect(header.querySelector('h1')!.textContent).toBe('Codecabin');
+  });
+});
