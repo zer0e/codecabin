@@ -1,5 +1,5 @@
 workflow: tweak
-phase: verify
+phase: archive
 context_compression: off
 build_mode: direct
 build_pause: null
@@ -12,9 +12,9 @@ auto_transition: true
 base_ref: dfcbfcc0830e5097bee1f2e165b03cdec765b819
 design_doc: null
 plan: null
-verify_result: pending
+verify_result: pass
 verification_report: docs/superpowers/reports/2026-11-21-polish-ui-styles-verify.md
 branch_status: handled
 created_at: 2026-11-21
-verified_at: null
-archived: false
+verified_at: 2026-11-21
+archived: true
