@@ -3,8 +3,8 @@
 #   Secret:   OPENAI_KEY            — API 密钥（两种协议共用）
 #   Variable: OPENAI_API_BASE       — 端点地址（OpenAI 兼容如 https://api.example.com/v1；
 #                                     Anthropic 兼容如 https://…/apps/anthropic）
-#   Variable: PR_REVIEW_MODEL       — 模型 ID，带协议前缀：openai/<model> 或 anthropic/<model>；
-#                                     不带前缀时默认按 anthropic/ 处理（当前端点为 Anthropic 协议）
+#   Variable: PR_REVIEW_MODEL       — 模型 ID，可带协议前缀 openai/<model> 或 anthropic/<model>；
+#                                     不带前缀时按端点 URL 自动推断协议
 #   Variable: PR_REVIEW_MAX_TOKENS  — 可选，模型上下文上限（默认 32000）
 name: PR Agent Review
 
@@ -20,8 +20,9 @@ jobs:
       issues: write
       pull-requests: write
     env:
-      # LiteLLM 要求模型带协议前缀；变量里没写时默认 anthropic/（当前端点为 Anthropic 协议）
-      REVIEW_MODEL: ${{ startsWith(vars.PR_REVIEW_MODEL, 'openai/') && vars.PR_REVIEW_MODEL || startsWith(vars.PR_REVIEW_MODEL, 'anthropic/') && vars.PR_REVIEW_MODEL || format('anthropic/{0}', vars.PR_REVIEW_MODEL) }}
+      # LiteLLM 要求模型带协议前缀。显式前缀（openai/ 或 anthropic/）优先；
+      # 无前缀时按端点 URL 推断：含 anthropic → Anthropic 协议，否则 OpenAI 兼容
+      REVIEW_MODEL: ${{ startsWith(vars.PR_REVIEW_MODEL, 'openai/') && vars.PR_REVIEW_MODEL || startsWith(vars.PR_REVIEW_MODEL, 'anthropic/') && vars.PR_REVIEW_MODEL || (contains(vars.OPENAI_API_BASE, 'anthropic') && format('anthropic/{0}', vars.PR_REVIEW_MODEL) || format('openai/{0}', vars.PR_REVIEW_MODEL)) }}
     steps:
       - name: PR-Agent review
         # 官方 SECURITY.md 推荐的双重钉定：直接用 digest 钉定的 v0.50.0 运行时镜像，
