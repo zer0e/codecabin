@@ -66,6 +66,44 @@ index.html (#app) → src/main.ts → src/ui/panels.ts renderApp()
 - `.claude/rules/comet-phase-guard.md` 定义了五阶段流程（open → design → build → verify → archive）与硬性约束：阶段状态存于 change 的 `.comet.yaml`，阶段推进只能经 `comet-guard`/`comet-state` 脚本，多个决策点必须等用户确认。有活跃 change 时严格遵守该规则。
 - 小改动走 `/comet-tweak`，bug 修复走 `/comet-hotfix`，新功能走 `/comet`。实现完成后 spec 场景需回写（参考已归档的 `2026-11-20-add-codecabin-tools`）。
 - `docs/superpowers/` 存放 Design Doc、实现计划与验证报告，是设计决策（含边界场景与已知限制）的详细记录。
+- **落地一律经 PR**：Comet 的实现与生命周期产物在特性分支上提交并随 PR 合并；verify 阶段「分支处理」决策点默认选择「推送并创建 PR」。详见下节。
+
+## Issue / PR 交付规范
+
+**禁止直接 push main。** 所有变更（含文档、CI 配置）走以下流水线：
+
+```
+issue（打标）→ 特性分支 → PR → bot 审查 → 迭代修复 → 合并 PR → 关闭 issue
+```
+
+### Issue
+
+- 需求 / bug 以 issue 为起点，打类型标签（`bug` / `enhancement` / `ui` / `documentation` 等）；issue 是交付验收的锚点。
+- **PR 合并后**才关闭 issue，附交付摘要评论（提交区间、验证证据、已知限制）。
+
+### 分支与 PR
+
+- 分支命名：`feat/<主题>`、`fix/<主题>`、`chore/<主题>`、`docs/<主题>`。
+- PR 标题遵循提交规范；正文含目的、改动点、验证证据、关联 issue（`Closes #N`）。
+
+### Bot 审查（PR-Agent）
+
+- `.github/workflows/pr-agent.yml`：PR opened / synchronize 自动 describe + review + improve，审查意见为中文；每次推送修复自动重审，形成「审查 → 修复 → 再审」闭环。
+- 运行时镜像按官方 SECURITY.md 以 **digest 钉定**（当前 v0.50.0）；升级须重新解析并验证 digest，且经用户确认。
+- 配置经仓库 Settings → Secrets and variables → Actions 注入，不入库：Secret `OPENAI_KEY`；Variables `OPENAI_API_BASE`（端点）、`PR_REVIEW_MODEL`（模型 ID，协议前缀可省略，按端点 URL 自适应 openai/ 或 anthropic/）、`PR_REVIEW_MAX_TOKENS`（可选，默认 32000）。
+- fork PR 无 secrets，经 job 级门禁跳过而非失败。
+- **意见处置**：逐条技术评估、对照代码库事实验证，不盲从也不无视；采纳项修复后推送触发重审；**拒绝项必须在 PR 评论附实证说明**（参考 `.claude/skills/receiving-code-review`）。
+
+### 合并
+
+- 前置条件：无未处置的 CRITICAL / IMPORTANT 审查意见、Actions 检查绿、Cloudflare 预览部署成功。
+- 默认 squash merge（需保留逐条提交历史时改用 merge commit）；合并后关闭关联 issue。
+
+### 提交规范
+
+- 格式 `<type>: <中文简述>`，type ∈ `feat` / `fix` / `docs` / `ci` / `chore` / `tweak`（Comet 任务提交按对应 skill 约定）。
+- 每个 task 验收后立即提交，不得积攒（Comet build 规则）。
+- AI 辅助提交末尾附 `Co-Authored-By: Claude Code <noreply@anthropic.com>`。
 
 ## 代码检索
 
