@@ -14,6 +14,8 @@ on:
 
 jobs:
   pr-agent:
+    # fork PR 拿不到仓库 secrets，跳过而非红叉（审查仅覆盖同仓库分支 PR）
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,6 +26,16 @@ jobs:
       # 无前缀时按端点 URL 推断：含 anthropic → Anthropic 协议，否则 OpenAI 兼容
       REVIEW_MODEL: ${{ startsWith(vars.PR_REVIEW_MODEL, 'openai/') && vars.PR_REVIEW_MODEL || startsWith(vars.PR_REVIEW_MODEL, 'anthropic/') && vars.PR_REVIEW_MODEL || (contains(vars.OPENAI_API_BASE, 'anthropic') && format('anthropic/{0}', vars.PR_REVIEW_MODEL) || format('openai/{0}', vars.PR_REVIEW_MODEL)) }}
     steps:
+      - name: Validate review configuration
+        env:
+          REVIEW_MODEL_VAR: ${{ vars.PR_REVIEW_MODEL }}
+          API_BASE_VAR: ${{ vars.OPENAI_API_BASE }}
+          API_KEY_VAR: ${{ secrets.OPENAI_KEY }}
+        run: |
+          if [ -z "$REVIEW_MODEL_VAR" ] || [ -z "$API_BASE_VAR" ] || [ -z "$API_KEY_VAR" ]; then
+            echo "::error::仓库配置缺失：需要 Secret OPENAI_KEY 与 Variables OPENAI_API_BASE / PR_REVIEW_MODEL（Settings → Secrets and variables → Actions）" >&2
+            exit 1
+          fi
       - name: PR-Agent review
         # 官方 SECURITY.md 推荐的双重钉定：直接用 digest 钉定的 v0.50.0 运行时镜像，
         # 不经滚动 tag 的 wrapper action（The-PR-Agent/pr-agent，原 qodo-ai/pr-agent）
