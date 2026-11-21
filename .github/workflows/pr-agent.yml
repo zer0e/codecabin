@@ -12,6 +12,11 @@ on:
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize]
 
+# 同一 PR 连续推送只保留最新审查，取消过期运行（避免重复评论与额度浪费）
+concurrency:
+  group: pr-agent-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   pr-agent:
     # fork PR 拿不到仓库 secrets，跳过而非红叉（审查仅覆盖同仓库分支 PR）
