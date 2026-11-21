@@ -32,4 +32,7 @@ jobs:
           # fallback 与主模型一致，避免回退到端点不存在的默认模型（如 gpt-6-luna）
           CONFIG__FALLBACK_MODELS: ${{ format('["{0}"]', env.REVIEW_MODEL) }}
           CONFIG__CUSTOM_MODEL_MAX_TOKENS: ${{ vars.PR_REVIEW_MAX_TOKENS || '32000' }}
+          # 仓库 .pr_agent.toml 从 base 分支（main）读取，PR 合并前不生效；
+          # 经 env 直接注入，保证 synchronize（推送修复）立即触发自动重审
+          GITHUB_ACTION_CONFIG__PR_ACTIONS: '["opened", "reopened", "ready_for_review", "synchronize"]'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
