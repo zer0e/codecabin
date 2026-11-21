@@ -1,0 +1,8 @@
+{
+  // Cloudflare Workers 静态资源部署：纯静态 SPA，无 Worker 脚本入口
+  "name": "codecabin",
+  "compatibility_date": "2026-11-21",
+  "assets": {
+    "directory": "./dist"
+  }
+}
